@@ -10357,7 +10357,7 @@ func (cook SetClientInfo2ARBCookie) Check() error {
 // Write request to wire for SetClientInfo2ARB
 // setClientInfo2ARBRequest writes a SetClientInfo2ARB request to a byte slice.
 func setClientInfo2ARBRequest(c *xgb.Conn, MajorVersion uint32, MinorVersion uint32, NumVersions uint32, GlStrLen uint32, GlxStrLen uint32, GlVersions []uint32, GlExtensionString string, GlxExtensionString string) []byte {
-	size := xgb.Pad(((((24 + xgb.Pad(((int(NumVersions) * 3) * 4))) + xgb.Pad((int(GlStrLen) * 1))) + 4) + xgb.Pad((int(GlxStrLen) * 1))))
+	size := xgb.Pad((((24 + xgb.Pad(((int(NumVersions) * 3) * 4))) + xgb.Pad((int(GlStrLen) * 1))) + xgb.Pad((int(GlxStrLen) * 1))))
 	b := 0
 	buf := make([]byte, size)
 
@@ -10369,7 +10369,7 @@ func setClientInfo2ARBRequest(c *xgb.Conn, MajorVersion uint32, MinorVersion uin
 	buf[b] = 35 // request opcode
 	b += 1
 
-	blen := b
+	xgb.Put16(buf[b:], uint16(size/4)) // write request size in 4-byte units
 	b += 2
 
 	xgb.Put32(buf[b:], MajorVersion)
@@ -10395,14 +10395,10 @@ func setClientInfo2ARBRequest(c *xgb.Conn, MajorVersion uint32, MinorVersion uin
 	copy(buf[b:], GlExtensionString[:GlStrLen])
 	b += int(GlStrLen)
 
-	b = (b + 3) & ^3 // alignment gap
-
 	copy(buf[b:], GlxExtensionString[:GlxStrLen])
 	b += int(GlxStrLen)
 
-	b = xgb.Pad(b)
-	xgb.Put16(buf[blen:], uint16(b/4)) // write request size in 4-byte units
-	return buf[:b]
+	return buf
 }
 
 // SetClientInfoARBCookie is a cookie used only for SetClientInfoARB requests.
@@ -10445,7 +10441,7 @@ func (cook SetClientInfoARBCookie) Check() error {
 // Write request to wire for SetClientInfoARB
 // setClientInfoARBRequest writes a SetClientInfoARB request to a byte slice.
 func setClientInfoARBRequest(c *xgb.Conn, MajorVersion uint32, MinorVersion uint32, NumVersions uint32, GlStrLen uint32, GlxStrLen uint32, GlVersions []uint32, GlExtensionString string, GlxExtensionString string) []byte {
-	size := xgb.Pad(((((24 + xgb.Pad(((int(NumVersions) * 2) * 4))) + xgb.Pad((int(GlStrLen) * 1))) + 4) + xgb.Pad((int(GlxStrLen) * 1))))
+	size := xgb.Pad((((24 + xgb.Pad(((int(NumVersions) * 2) * 4))) + xgb.Pad((int(GlStrLen) * 1))) + xgb.Pad((int(GlxStrLen) * 1))))
 	b := 0
 	buf := make([]byte, size)
 
@@ -10457,7 +10453,7 @@ func setClientInfoARBRequest(c *xgb.Conn, MajorVersion uint32, MinorVersion uint
 	buf[b] = 33 // request opcode
 	b += 1
 
-	blen := b
+	xgb.Put16(buf[b:], uint16(size/4)) // write request size in 4-byte units
 	b += 2
 
 	xgb.Put32(buf[b:], MajorVersion)
@@ -10483,14 +10479,10 @@ func setClientInfoARBRequest(c *xgb.Conn, MajorVersion uint32, MinorVersion uint
 	copy(buf[b:], GlExtensionString[:GlStrLen])
 	b += int(GlStrLen)
 
-	b = (b + 3) & ^3 // alignment gap
-
 	copy(buf[b:], GlxExtensionString[:GlxStrLen])
 	b += int(GlxStrLen)
 
-	b = xgb.Pad(b)
-	xgb.Put16(buf[blen:], uint16(b/4)) // write request size in 4-byte units
-	return buf[:b]
+	return buf
 }
 
 // SwapBuffersCookie is a cookie used only for SwapBuffers requests.

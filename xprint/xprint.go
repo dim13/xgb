@@ -479,7 +479,7 @@ func (cook CreateContextCookie) Check() error {
 // Write request to wire for CreateContext
 // createContextRequest writes a CreateContext request to a byte slice.
 func createContextRequest(c *xgb.Conn, ContextId uint32, PrinterNameLen uint32, LocaleLen uint32, PrinterName []String8, Locale []String8) []byte {
-	size := xgb.Pad((((16 + xgb.Pad((int(PrinterNameLen) * 1))) + 4) + xgb.Pad((int(LocaleLen) * 1))))
+	size := xgb.Pad(((16 + xgb.Pad((int(PrinterNameLen) * 1))) + xgb.Pad((int(LocaleLen) * 1))))
 	b := 0
 	buf := make([]byte, size)
 
@@ -491,7 +491,7 @@ func createContextRequest(c *xgb.Conn, ContextId uint32, PrinterNameLen uint32, 
 	buf[b] = 2 // request opcode
 	b += 1
 
-	blen := b
+	xgb.Put16(buf[b:], uint16(size/4)) // write request size in 4-byte units
 	b += 2
 
 	xgb.Put32(buf[b:], ContextId)
@@ -508,16 +508,12 @@ func createContextRequest(c *xgb.Conn, ContextId uint32, PrinterNameLen uint32, 
 		b += 1
 	}
 
-	b = (b + 3) & ^3 // alignment gap
-
 	for i := 0; i < int(LocaleLen); i++ {
 		buf[b] = byte(Locale[i])
 		b += 1
 	}
 
-	b = xgb.Pad(b)
-	xgb.Put16(buf[blen:], uint16(b/4)) // write request size in 4-byte units
-	return buf[:b]
+	return buf
 }
 
 // PrintDestroyContextCookie is a cookie used only for PrintDestroyContext requests.
@@ -1496,7 +1492,7 @@ func printGetPrinterListReply(buf []byte) *PrintGetPrinterListReply {
 // Write request to wire for PrintGetPrinterList
 // printGetPrinterListRequest writes a PrintGetPrinterList request to a byte slice.
 func printGetPrinterListRequest(c *xgb.Conn, PrinterNameLen uint32, LocaleLen uint32, PrinterName []String8, Locale []String8) []byte {
-	size := xgb.Pad((((12 + xgb.Pad((int(PrinterNameLen) * 1))) + 4) + xgb.Pad((int(LocaleLen) * 1))))
+	size := xgb.Pad(((12 + xgb.Pad((int(PrinterNameLen) * 1))) + xgb.Pad((int(LocaleLen) * 1))))
 	b := 0
 	buf := make([]byte, size)
 
@@ -1508,7 +1504,7 @@ func printGetPrinterListRequest(c *xgb.Conn, PrinterNameLen uint32, LocaleLen ui
 	buf[b] = 1 // request opcode
 	b += 1
 
-	blen := b
+	xgb.Put16(buf[b:], uint16(size/4)) // write request size in 4-byte units
 	b += 2
 
 	xgb.Put32(buf[b:], PrinterNameLen)
@@ -1522,16 +1518,12 @@ func printGetPrinterListRequest(c *xgb.Conn, PrinterNameLen uint32, LocaleLen ui
 		b += 1
 	}
 
-	b = (b + 3) & ^3 // alignment gap
-
 	for i := 0; i < int(LocaleLen); i++ {
 		buf[b] = byte(Locale[i])
 		b += 1
 	}
 
-	b = xgb.Pad(b)
-	xgb.Put16(buf[blen:], uint16(b/4)) // write request size in 4-byte units
-	return buf[:b]
+	return buf
 }
 
 // PrintGetScreenOfContextCookie is a cookie used only for PrintGetScreenOfContext requests.
@@ -1763,7 +1755,7 @@ func (cook PrintPutDocumentDataCookie) Check() error {
 // Write request to wire for PrintPutDocumentData
 // printPutDocumentDataRequest writes a PrintPutDocumentData request to a byte slice.
 func printPutDocumentDataRequest(c *xgb.Conn, Drawable xproto.Drawable, LenData uint32, LenFmt uint16, LenOptions uint16, Data []byte, DocFormat []String8, Options []String8) []byte {
-	size := xgb.Pad((((((16 + xgb.Pad((int(LenData) * 1))) + 4) + xgb.Pad((int(LenFmt) * 1))) + 4) + xgb.Pad((int(LenOptions) * 1))))
+	size := xgb.Pad((((16 + xgb.Pad((int(LenData) * 1))) + xgb.Pad((int(LenFmt) * 1))) + xgb.Pad((int(LenOptions) * 1))))
 	b := 0
 	buf := make([]byte, size)
 
@@ -1775,7 +1767,7 @@ func printPutDocumentDataRequest(c *xgb.Conn, Drawable xproto.Drawable, LenData 
 	buf[b] = 11 // request opcode
 	b += 1
 
-	blen := b
+	xgb.Put16(buf[b:], uint16(size/4)) // write request size in 4-byte units
 	b += 2
 
 	xgb.Put32(buf[b:], uint32(Drawable))
@@ -1793,23 +1785,17 @@ func printPutDocumentDataRequest(c *xgb.Conn, Drawable xproto.Drawable, LenData 
 	copy(buf[b:], Data[:LenData])
 	b += int(LenData)
 
-	b = (b + 3) & ^3 // alignment gap
-
 	for i := 0; i < int(LenFmt); i++ {
 		buf[b] = byte(DocFormat[i])
 		b += 1
 	}
-
-	b = (b + 3) & ^3 // alignment gap
 
 	for i := 0; i < int(LenOptions); i++ {
 		buf[b] = byte(Options[i])
 		b += 1
 	}
 
-	b = xgb.Pad(b)
-	xgb.Put16(buf[blen:], uint16(b/4)) // write request size in 4-byte units
-	return buf[:b]
+	return buf
 }
 
 // PrintQueryScreensCookie is a cookie used only for PrintQueryScreens requests.
