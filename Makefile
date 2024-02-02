@@ -11,7 +11,7 @@
 
 # My path to the X protocol XML descriptions.
 ifndef XPROTO
-XPROTO=/usr/share/xcb
+XPROTO=proto
 endif
 
 # All of the XML files in my /usr/share/xcb directory EXCEPT XKB. -_-
