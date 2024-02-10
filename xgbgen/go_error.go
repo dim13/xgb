@@ -28,8 +28,7 @@ func (e *Error) Define(c *Context) {
 	// Let's the XGB event loop read this error.
 	c.Putln("func init() {")
 	if c.protocol.isExt() {
-		c.Putln("xgb.NewExtErrorFuncs[\"%s\"][%d] = %sNew",
-			c.protocol.ExtXName, e.Number, e.ErrType())
+		c.Putln("xgb.NewExtErrorFuncs[\"%s\"][%d] = %sNew", c.protocol.ExtXName, e.Number, e.ErrType())
 	} else {
 		c.Putln("xgb.NewErrorFuncs[%d] = %sNew", e.Number, e.ErrType())
 	}
@@ -61,8 +60,7 @@ func (e *Error) Read(c *Context) {
 
 // ImplementsError writes functions to implement the XGB Error interface.
 func (e *Error) ImplementsError(c *Context) {
-	c.Putln("// SequenceId returns the sequence id attached to the %s error.",
-		e.ErrConst())
+	c.Putln("// SequenceId returns the sequence id attached to the %s error.", e.ErrConst())
 	c.Putln("// This is mostly used internally.")
 	c.Putln("func (err %s) SequenceId() uint16 {", e.ErrType())
 	c.Putln("return err.Sequence")
@@ -104,8 +102,7 @@ func (e *ErrorCopy) Define(c *Context) {
 	// Let's the XGB know how to read this error.
 	c.Putln("func init() {")
 	if c.protocol.isExt() {
-		c.Putln("xgb.NewExtErrorFuncs[\"%s\"][%d] = %sNew",
-			c.protocol.ExtXName, e.Number, e.ErrType())
+		c.Putln("xgb.NewExtErrorFuncs[\"%s\"][%d] = %sNew", c.protocol.ExtXName, e.Number, e.ErrType())
 	} else {
 		c.Putln("xgb.NewErrorFuncs[%d] = %sNew", e.Number, e.ErrType())
 	}
@@ -117,8 +114,7 @@ func (e *ErrorCopy) Read(c *Context) {
 	c.Putln("// %sNew constructs a %s value that implements xgb.Error from "+
 		"a byte slice.", e.ErrType(), e.ErrType())
 	c.Putln("func %sNew(buf []byte) xgb.Error {", e.ErrType())
-	c.Putln("v := %s(%sNew(buf).(%s))",
-		e.ErrType(), e.Old.(*Error).ErrType(), e.Old.(*Error).ErrType())
+	c.Putln("v := %s(%sNew(buf).(%s))", e.ErrType(), e.Old.(*Error).ErrType(), e.Old.(*Error).ErrType())
 	c.Putln("v.NiceName = \"%s\"", e.SrcName())
 	c.Putln("return v")
 	c.Putln("}")
@@ -127,8 +123,7 @@ func (e *ErrorCopy) Read(c *Context) {
 
 // ImplementsError writes functions to implement the XGB Error interface.
 func (e *ErrorCopy) ImplementsError(c *Context) {
-	c.Putln("// SequenceId returns the sequence id attached to the %s error.",
-		e.ErrConst())
+	c.Putln("// SequenceId returns the sequence id attached to the %s error.", e.ErrConst())
 	c.Putln("// This is mostly used internally.")
 	c.Putln("func (err %s) SequenceId() uint16 {", e.ErrType())
 	c.Putln("return err.Sequence")
@@ -165,15 +160,12 @@ func ErrorFieldString(c *Context, fields []Field, errName string) {
 			continue
 		default:
 			if field.SrcType() == "string" {
-				c.Putln("fieldVals = append(fieldVals, \"%s: \" + err.%s)",
-					field.SrcName(), field.SrcName())
+				c.Putln("fieldVals = append(fieldVals, \"%s: \" + err.%s)", field.SrcName(), field.SrcName())
 			} else {
-				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", err.%s)",
-					field.SrcName(), "%d", field.SrcName())
+				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", err.%s)", field.SrcName(), "%d", field.SrcName())
 				c.Putln("fieldVals = append(fieldVals, %s)", format)
 			}
 		}
 	}
-	c.Putln("return \"%s {\" + xgb.StringsJoin(fieldVals, \", \") + \"}\"",
-		errName)
+	c.Putln("return \"%s {\" + xgb.StringsJoin(fieldVals, \", \") + \"}\"", errName)
 }

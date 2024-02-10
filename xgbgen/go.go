@@ -63,8 +63,7 @@ var NameMap = map[string]string{}
 
 // Base types
 func (b *Base) Define(c *Context) {
-	c.Putln("// Skipping definition for base type '%s'",
-		SrcName(c.protocol, b.XmlName()))
+	c.Putln("// Skipping definition for base type '%s'", SrcName(c.protocol, b.XmlName()))
 	c.Putln("")
 }
 
@@ -82,8 +81,7 @@ func (enum *Enum) Define(c *Context) {
 func (res *Resource) Define(c *Context) {
 	c.Putln("type %s uint32", res.SrcName())
 	c.Putln("")
-	c.Putln("func New%sId(c *xgb.Conn) (%s, error) {",
-		res.SrcName(), res.SrcName())
+	c.Putln("func New%sId(c *xgb.Conn) (%s, error) {", res.SrcName(), res.SrcName())
 	c.Putln("id, err := c.NewId()")
 	c.Putln("if err != nil {")
 	c.Putln("return 0, err")
@@ -133,26 +131,22 @@ func (f *LocalField) Define(c *Context) {
 }
 
 func (f *LocalField) Read(c *Context, prefix string) {
-	c.Putln("// reading local field: %s (%s) :: %s",
-		f.SrcName(), f.Size(), f.Type.SrcName())
+	c.Putln("// reading local field: %s (%s) :: %s", f.SrcName(), f.Size(), f.Type.SrcName())
 	panic("unreachable")
 }
 
 func (f *LocalField) Write(c *Context, prefix string) {
-	c.Putln("// skip writing local field: %s (%s) :: %s",
-		f.SrcName(), f.Size(), f.Type.SrcName())
+	c.Putln("// skip writing local field: %s (%s) :: %s", f.SrcName(), f.Size(), f.Type.SrcName())
 }
 
 // Expr fields
 func (f *ExprField) Define(c *Context) {
-	c.Putln("// expression field: %s %s (%s)",
-		f.SrcName(), f.Type.SrcName(), f.Expr)
+	c.Putln("// expression field: %s %s (%s)", f.SrcName(), f.Type.SrcName(), f.Expr)
 	panic("unreachable")
 }
 
 func (f *ExprField) Read(c *Context, prefix string) {
-	c.Putln("// reading expression field: %s (%s) (%s) :: %s",
-		f.SrcName(), f.Size(), f.Expr, f.Type.SrcName())
+	c.Putln("// reading expression field: %s (%s) (%s) :: %s", f.SrcName(), f.Size(), f.Expr, f.Type.SrcName())
 	panic("unreachable")
 }
 
@@ -173,11 +167,9 @@ func (f *ValueField) Define(c *Context) {
 }
 
 func (f *ValueField) Read(c *Context, prefix string) {
-	ReadSimpleSingleField(c,
-		fmt.Sprintf("%s%s", prefix, f.MaskName), f.MaskType)
+	ReadSimpleSingleField(c, fmt.Sprintf("%s%s", prefix, f.MaskName), f.MaskType)
 	c.Putln("")
-	c.Putln("%s%s = make([]uint32, %s)",
-		prefix, f.ListName, f.ListLength().Reduce(prefix))
+	c.Putln("%s%s = make([]uint32, %s)", prefix, f.ListName, f.ListLength().Reduce(prefix))
 	c.Putln("for i := 0; i < %s; i++ {", f.ListLength().Reduce(prefix))
 	c.Putln("%s%s[i] = xgb.Get32(buf[b:])", prefix, f.ListName)
 	c.Putln("b += 4")
@@ -186,8 +178,7 @@ func (f *ValueField) Read(c *Context, prefix string) {
 }
 
 func (f *ValueField) Write(c *Context, prefix string) {
-	WriteSimpleSingleField(c,
-		fmt.Sprintf("%s%s", prefix, f.MaskName), f.MaskType)
+	WriteSimpleSingleField(c, fmt.Sprintf("%s%s", prefix, f.MaskName), f.MaskType)
 	c.Putln("for i := 0; i < %s; i++ {", f.ListLength().Reduce(prefix))
 	c.Putln("xgb.Put32(buf[b:], %s%s[i])", prefix, f.ListName)
 	c.Putln("b += 4")
@@ -202,8 +193,7 @@ func (f *SwitchField) Define(c *Context) {
 
 func (f *SwitchField) Read(c *Context, prefix string) {
 	c.Putln("")
-	c.Putln("%s%s = make([]uint32, %s)",
-		prefix, f.Name, f.ListLength().Reduce(prefix))
+	c.Putln("%s%s = make([]uint32, %s)", prefix, f.Name, f.ListLength().Reduce(prefix))
 	c.Putln("for i := 0; i < %s; i++ {", f.ListLength().Reduce(prefix))
 	c.Putln("%s%s[i] = xgb.Get32(buf[b:])", prefix, f.Name)
 	c.Putln("b += 4")

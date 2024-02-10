@@ -6,8 +6,7 @@ import (
 )
 
 func (r *Request) Define(c *Context) {
-	c.Putln("// %s is a cookie used only for %s requests.",
-		r.CookieName(), r.SrcName())
+	c.Putln("// %s is a cookie used only for %s requests.", r.CookieName(), r.SrcName())
 	c.Putln("type %s struct {", r.CookieName())
 	c.Putln("*xgb.Cookie")
 	c.Putln("}")
@@ -16,8 +15,7 @@ func (r *Request) Define(c *Context) {
 		c.Putln("// %s sends a checked request.", r.SrcName())
 		c.Putln("// If an error occurs, it will be returned with the reply "+
 			"by calling %s.Reply()", r.CookieName())
-		c.Putln("func %s(c *xgb.Conn, %s) %s {",
-			r.SrcName(), r.ParamNameTypes(), r.CookieName())
+		c.Putln("func %s(c *xgb.Conn, %s) %s {", r.SrcName(), r.ParamNameTypes(), r.CookieName())
 		r.CheckExt(c)
 		c.Putln("cookie := c.NewCookie(true, true)")
 		c.Putln("c.NewRequest(%s(c, %s), cookie)", r.ReqName(), r.ParamNames())
@@ -28,8 +26,7 @@ func (r *Request) Define(c *Context) {
 		c.Putln("// %sUnchecked sends an unchecked request.", r.SrcName())
 		c.Putln("// If an error occurs, it can only be retrieved using " +
 			"xgb.WaitForEvent or xgb.PollForEvent.")
-		c.Putln("func %sUnchecked(c *xgb.Conn, %s) %s {",
-			r.SrcName(), r.ParamNameTypes(), r.CookieName())
+		c.Putln("func %sUnchecked(c *xgb.Conn, %s) %s {", r.SrcName(), r.ParamNameTypes(), r.CookieName())
 		r.CheckExt(c)
 		c.Putln("cookie := c.NewCookie(false, true)")
 		c.Putln("c.NewRequest(%s(c, %s), cookie)", r.ReqName(), r.ParamNames())
@@ -42,8 +39,7 @@ func (r *Request) Define(c *Context) {
 		c.Putln("// %s sends an unchecked request.", r.SrcName())
 		c.Putln("// If an error occurs, it can only be retrieved using " +
 			"xgb.WaitForEvent or xgb.PollForEvent.")
-		c.Putln("func %s(c *xgb.Conn, %s) %s {",
-			r.SrcName(), r.ParamNameTypes(), r.CookieName())
+		c.Putln("func %s(c *xgb.Conn, %s) %s {", r.SrcName(), r.ParamNameTypes(), r.CookieName())
 		r.CheckExt(c)
 		c.Putln("cookie := c.NewCookie(false, false)")
 		c.Putln("c.NewRequest(%s(c, %s), cookie)", r.ReqName(), r.ParamNames())
@@ -54,8 +50,7 @@ func (r *Request) Define(c *Context) {
 		c.Putln("// %sChecked sends a checked request.", r.SrcName())
 		c.Putln("// If an error occurs, it can be retrieved using "+
 			"%s.Check()", r.CookieName())
-		c.Putln("func %sChecked(c *xgb.Conn, %s) %s {",
-			r.SrcName(), r.ParamNameTypes(), r.CookieName())
+		c.Putln("func %sChecked(c *xgb.Conn, %s) %s {", r.SrcName(), r.ParamNameTypes(), r.CookieName())
 		r.CheckExt(c)
 		c.Putln("cookie := c.NewCookie(true, false)")
 		c.Putln("c.NewRequest(%s(c, %s), cookie)", r.ReqName(), r.ParamNames())
@@ -83,14 +78,12 @@ func (r *Request) CheckExt(c *Context) {
 	c.Putln("defer c.ExtLock.RUnlock()")
 	c.Putln("if _, ok := c.Extensions[\"%s\"]; !ok {", c.protocol.ExtXName)
 	c.Putln("panic(\"Cannot issue request '%s' using the uninitialized "+
-		"extension '%s'. %s.Init(connObj) must be called first.\")",
-		r.SrcName(), c.protocol.ExtXName, c.protocol.PkgName())
+		"extension '%s'. %s.Init(connObj) must be called first.\")", r.SrcName(), c.protocol.ExtXName, c.protocol.PkgName())
 	c.Putln("}")
 }
 
 func (r *Request) ReadReply(c *Context) {
-	c.Putln("// %s represents the data returned from a %s request.",
-		r.ReplyTypeName(), r.SrcName())
+	c.Putln("// %s represents the data returned from a %s request.", r.ReplyTypeName(), r.SrcName())
 	c.Putln("type %s struct {", r.ReplyTypeName())
 	c.Putln("Sequence uint16 // sequence number of the request for this reply")
 	c.Putln("Length uint32 // number of bytes in this reply")
@@ -100,10 +93,8 @@ func (r *Request) ReadReply(c *Context) {
 	c.Putln("}")
 	c.Putln("")
 
-	c.Putln("// Reply blocks and returns the reply data for a %s request.",
-		r.SrcName())
-	c.Putln("func (cook %s) Reply() (*%s, error) {",
-		r.CookieName(), r.ReplyTypeName())
+	c.Putln("// Reply blocks and returns the reply data for a %s request.", r.SrcName())
+	c.Putln("func (cook %s) Reply() (*%s, error) {", r.CookieName(), r.ReplyTypeName())
 	c.Putln("buf, err := cook.Cookie.Reply()")
 	c.Putln("if err != nil {")
 	c.Putln("return nil, err")
@@ -115,10 +106,8 @@ func (r *Request) ReadReply(c *Context) {
 	c.Putln("}")
 	c.Putln("")
 
-	c.Putln("// %s reads a byte slice into a %s value.",
-		r.ReplyName(), r.ReplyTypeName())
-	c.Putln("func %s(buf []byte) *%s {",
-		r.ReplyName(), r.ReplyTypeName())
+	c.Putln("// %s reads a byte slice into a %s value.", r.ReplyName(), r.ReplyTypeName())
+	c.Putln("func %s(buf []byte) *%s {", r.ReplyName(), r.ReplyTypeName())
 	c.Putln("v := new(%s)", r.ReplyTypeName())
 	c.Putln("b := 1 // skip reply determinant")
 	c.Putln("")
@@ -162,10 +151,8 @@ func (r *Request) WriteRequest(c *Context) {
 		c.Putln("return buf[:b]")
 	}
 	c.Putln("// Write request to wire for %s", r.SrcName())
-	c.Putln("// %s writes a %s request to a byte slice.",
-		r.ReqName(), r.SrcName())
-	c.Putln("func %s(c *xgb.Conn, %s) []byte {",
-		r.ReqName(), r.ParamNameTypes())
+	c.Putln("// %s writes a %s request to a byte slice.", r.ReqName(), r.SrcName())
+	c.Putln("func %s(c *xgb.Conn, %s) []byte {", r.ReqName(), r.ParamNameTypes())
 	c.Putln("size := %s", sz)
 	c.Putln("b := 0")
 	c.Putln("buf := make([]byte, size)")
@@ -223,10 +210,8 @@ func (r *Request) ParamNameTypes() string {
 	for _, field := range r.Fields {
 		switch f := field.(type) {
 		case *ValueField:
-			nameTypes = append(nameTypes,
-				fmt.Sprintf("%s %s", f.MaskName, f.MaskType.SrcName()))
-			nameTypes = append(nameTypes,
-				fmt.Sprintf("%s []uint32", f.ListName))
+			nameTypes = append(nameTypes, fmt.Sprintf("%s %s", f.MaskName, f.MaskType.SrcName()))
+			nameTypes = append(nameTypes, fmt.Sprintf("%s []uint32", f.ListName))
 		case *PadField:
 			continue
 		case *ExprField:
@@ -234,8 +219,7 @@ func (r *Request) ParamNameTypes() string {
 		case *RequiredStartAlign:
 			continue
 		default:
-			nameTypes = append(nameTypes,
-				fmt.Sprintf("%s %s", field.SrcName(), field.SrcType()))
+			nameTypes = append(nameTypes, fmt.Sprintf("%s %s", field.SrcName(), field.SrcType()))
 		}
 	}
 	return strings.Join(nameTypes, ", ")

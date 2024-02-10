@@ -28,8 +28,7 @@ func (e *Event) Define(c *Context) {
 	e.Write(c)
 
 	// Makes sure that this event type is an Event interface.
-	c.Putln("// SequenceId returns the sequence id attached to the %s event.",
-		e.SrcName())
+	c.Putln("// SequenceId returns the sequence id attached to the %s event.", e.SrcName())
 	c.Putln("// Events without a sequence number (KeymapNotify) return 0.")
 	c.Putln("// This is mostly used internally.")
 	c.Putln("func (v %s) SequenceId() uint16 {", e.EvType())
@@ -40,8 +39,7 @@ func (e *Event) Define(c *Context) {
 	}
 	c.Putln("}")
 	c.Putln("")
-	c.Putln("// String is a rudimentary string representation of %s.",
-		e.EvType())
+	c.Putln("// String is a rudimentary string representation of %s.", e.EvType())
 	c.Putln("func (v %s) String() string {", e.EvType())
 	EventFieldString(c, e.Fields, e.SrcName())
 	c.Putln("}")
@@ -50,8 +48,7 @@ func (e *Event) Define(c *Context) {
 	// Let's the XGB event loop read this event.
 	c.Putln("func init() {")
 	if c.protocol.isExt() {
-		c.Putln("xgb.NewExtEventFuncs[\"%s\"][%d] = %sNew",
-			c.protocol.ExtXName, e.Number, e.EvType())
+		c.Putln("xgb.NewExtEventFuncs[\"%s\"][%d] = %sNew", c.protocol.ExtXName, e.Number, e.EvType())
 	} else {
 		c.Putln("xgb.NewEventFuncs[%d] = %sNew", e.Number, e.EvType())
 	}
@@ -120,8 +117,7 @@ func (e *EventCopy) Define(c *Context) {
 	e.Write(c)
 
 	// Makes sure that this event type is an Event interface.
-	c.Putln("// SequenceId returns the sequence id attached to the %s event.",
-		e.SrcName())
+	c.Putln("// SequenceId returns the sequence id attached to the %s event.", e.SrcName())
 	c.Putln("// Events without a sequence number (KeymapNotify) return 0.")
 	c.Putln("// This is mostly used internally.")
 	c.Putln("func (v %s) SequenceId() uint16 {", e.EvType())
@@ -140,8 +136,7 @@ func (e *EventCopy) Define(c *Context) {
 	// Let's the XGB event loop read this event.
 	c.Putln("func init() {")
 	if c.protocol.isExt() {
-		c.Putln("xgb.NewExtEventFuncs[\"%s\"][%d] = %sNew",
-			c.protocol.ExtXName, e.Number, e.EvType())
+		c.Putln("xgb.NewExtEventFuncs[\"%s\"][%d] = %sNew", c.protocol.ExtXName, e.Number, e.EvType())
 	} else {
 		c.Putln("xgb.NewEventFuncs[%d] = %sNew", e.Number, e.EvType())
 	}
@@ -153,8 +148,7 @@ func (e *EventCopy) Read(c *Context) {
 	c.Putln("// %sNew constructs a %s value that implements xgb.Event from "+
 		"a byte slice.", e.EvType(), e.EvType())
 	c.Putln("func %sNew(buf []byte) xgb.Event {", e.EvType())
-	c.Putln("return %s(%sNew(buf).(%s))",
-		e.EvType(), e.Old.(*Event).EvType(), e.Old.(*Event).EvType())
+	c.Putln("return %s(%sNew(buf).(%s))", e.EvType(), e.Old.(*Event).EvType(), e.Old.(*Event).EvType())
 	c.Putln("}")
 	c.Putln("")
 }
@@ -192,20 +186,16 @@ func EventFieldString(c *Context, fields []Field, evName string) {
 
 			switch field.SrcType() {
 			case "string":
-				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", v.%s)",
-					field.SrcName(), "%s", field.SrcName())
+				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", v.%s)", field.SrcName(), "%s", field.SrcName())
 				c.Putln("fieldVals = append(fieldVals, %s)", format)
 			case "bool":
-				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", v.%s)",
-					field.SrcName(), "%t", field.SrcName())
+				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", v.%s)", field.SrcName(), "%t", field.SrcName())
 				c.Putln("fieldVals = append(fieldVals, %s)", format)
 			default:
-				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", v.%s)",
-					field.SrcName(), "%d", field.SrcName())
+				format := fmt.Sprintf("xgb.Sprintf(\"%s: %s\", v.%s)", field.SrcName(), "%d", field.SrcName())
 				c.Putln("fieldVals = append(fieldVals, %s)", format)
 			}
 		}
 	}
-	c.Putln("return \"%s {\" + xgb.StringsJoin(fieldVals, \", \") + \"}\"",
-		evName)
+	c.Putln("return \"%s {\" + xgb.StringsJoin(fieldVals, \", \") + \"}\"", evName)
 }

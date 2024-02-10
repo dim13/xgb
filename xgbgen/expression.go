@@ -146,8 +146,7 @@ func (e *BinaryOp) Reduce(prefix string) string {
 			Expr: expr2,
 		}
 	}
-	return fmt.Sprintf("(%s %s %s)",
-		expr1.Reduce(prefix), e.Op, expr2.Reduce(prefix))
+	return fmt.Sprintf("(%s %s %s)", expr1.Reduce(prefix), e.Op, expr2.Reduce(prefix))
 }
 
 func (e *BinaryOp) String() string {

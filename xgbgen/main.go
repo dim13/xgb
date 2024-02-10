@@ -11,8 +11,7 @@ import (
 )
 
 var (
-	protoPath = flag.String("proto-path",
-		"/usr/share/xcb", "path to directory of X protocol XML files")
+	protoPath = flag.String("proto-path", "/usr/share/xcb", "path to directory of X protocol XML files")
 )
 
 func usage() {

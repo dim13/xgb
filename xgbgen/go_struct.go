@@ -32,8 +32,7 @@ func (s *Struct) Define(c *Context) {
 // the number of bytes read off the buffer.
 // 'ReadStructName' should only be used to read raw reply data from the wire.
 func (s *Struct) Read(c *Context) {
-	c.Putln("// %sRead reads a byte slice into a %s value.",
-		s.SrcName(), s.SrcName())
+	c.Putln("// %sRead reads a byte slice into a %s value.", s.SrcName(), s.SrcName())
 	c.Putln("func %sRead(buf []byte, v *%s) int {", s.SrcName(), s.SrcName())
 
 	c.Putln("b := 0")
@@ -52,10 +51,8 @@ func (s *Struct) Read(c *Context) {
 // a source (i.e., the buffer) byte slice, and a destination slice and returns
 // the number of bytes read from the byte slice.
 func (s *Struct) ReadList(c *Context) {
-	c.Putln("// %sReadList reads a byte slice into a list of %s values.",
-		s.SrcName(), s.SrcName())
-	c.Putln("func %sReadList(buf []byte, dest []%s) int {",
-		s.SrcName(), s.SrcName())
+	c.Putln("// %sReadList reads a byte slice into a list of %s values.", s.SrcName(), s.SrcName())
+	c.Putln("func %sReadList(buf []byte, dest []%s) int {", s.SrcName(), s.SrcName())
 	c.Putln("b := 0")
 	c.Putln("for i := 0; i < len(dest); i++ {")
 	c.Putln("dest[i] = %s{}", s.SrcName())
@@ -84,10 +81,8 @@ func (s *Struct) Write(c *Context) {
 }
 
 func (s *Struct) WriteList(c *Context) {
-	c.Putln("// %sListBytes writes a list of %s values to a byte slice.",
-		s.SrcName(), s.SrcName())
-	c.Putln("func %sListBytes(buf []byte, list []%s) int {",
-		s.SrcName(), s.SrcName())
+	c.Putln("// %sListBytes writes a list of %s values to a byte slice.", s.SrcName(), s.SrcName())
+	c.Putln("func %sListBytes(buf []byte, list []%s) int {", s.SrcName(), s.SrcName())
 	c.Putln("b := 0")
 	c.Putln("var structBytes []byte")
 	c.Putln("for _, item := range list {")
@@ -101,8 +96,7 @@ func (s *Struct) WriteList(c *Context) {
 }
 
 func (s *Struct) WriteListSize(c *Context) {
-	c.Putln("// %sListSize computes the size (bytes) of a list of %s values.",
-		s.SrcName(), s.SrcName())
+	c.Putln("// %sListSize computes the size (bytes) of a list of %s values.", s.SrcName(), s.SrcName())
 	c.Putln("func %sListSize(list []%s) int {", s.SrcName(), s.SrcName())
 	c.Putln("size := 0")
 	if s.Size().Expression.Concrete() {

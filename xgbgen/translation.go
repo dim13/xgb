@@ -271,8 +271,7 @@ func (x *XMLExpression) Translate() Expression {
 		}
 	case "popcount":
 		if len(x.Exprs) != 1 {
-			log.Panicf("'popcount' found %d expressions; expected 1.",
-				len(x.Exprs))
+			log.Panicf("'popcount' found %d expressions; expected 1.", len(x.Exprs))
 		}
 		return &PopCount{
 			Expr: x.Exprs[0].Translate(),
@@ -280,8 +279,7 @@ func (x *XMLExpression) Translate() Expression {
 	case "value":
 		val, err := strconv.Atoi(strings.TrimSpace(x.Data))
 		if err != nil {
-			log.Panicf("Could not convert '%s' in 'value' expression to int.",
-				x.Data)
+			log.Panicf("Could not convert '%s' in 'value' expression to int.", x.Data)
 		}
 		return &Value{
 			v: val,
@@ -289,8 +287,7 @@ func (x *XMLExpression) Translate() Expression {
 	case "bit":
 		bit, err := strconv.Atoi(strings.TrimSpace(x.Data))
 		if err != nil {
-			log.Panicf("Could not convert '%s' in 'bit' expression to int.",
-				x.Data)
+			log.Panicf("Could not convert '%s' in 'bit' expression to int.", x.Data)
 		}
 		if bit < 0 || bit > 31 {
 			log.Panicf("A 'bit' literal must be in the range [0, 31], but "+
@@ -315,8 +312,7 @@ func (x *XMLExpression) Translate() Expression {
 	}
 
 	log.Panicf("Unrecognized tag '%s' in expression context. Expected one of "+
-		"op, fieldref, value, bit, enumref, unop, sumof or popcount.",
-		x.XMLName.Local)
+		"op, fieldref, value, bit, enumref, unop, sumof or popcount.", x.XMLName.Local)
 	panic("unreachable")
 }
 

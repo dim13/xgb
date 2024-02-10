@@ -52,8 +52,7 @@ func (r *Request) XmlName() string {
 // The generated function is not currently exported.
 func (r *Request) ReplyName() string {
 	if r.Reply == nil {
-		log.Panicf("Cannot call 'ReplyName' on request %s, which has no reply.",
-			r.SrcName())
+		log.Panicf("Cannot call 'ReplyName' on request %s, which has no reply.", r.SrcName())
 	}
 	name := r.SrcName()
 	lower := string(unicode.ToLower(rune(name[0]))) + name[1:]
@@ -64,8 +63,7 @@ func (r *Request) ReplyName() string {
 // for this request.
 func (r *Request) ReplyTypeName() string {
 	if r.Reply == nil {
-		log.Panicf("Cannot call 'ReplyName' on request %s, which has no reply.",
-			r.SrcName())
+		log.Panicf("Cannot call 'ReplyName' on request %s, which has no reply.", r.SrcName())
 	}
 	return fmt.Sprintf("%sReply", r.SrcName())
 }

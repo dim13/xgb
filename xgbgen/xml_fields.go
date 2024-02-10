@@ -9,7 +9,7 @@ type XMLField struct {
 	XMLName xml.Name
 
 	// For 'pad' element
-	Bytes uint `xml:"bytes,attr"`
+	Bytes uint   `xml:"bytes,attr"`
 	Align uint16 `xml:"align,attr"`
 
 	// For 'field', 'list', 'localfield', 'exprfield' and 'switch' elements.
@@ -63,8 +63,14 @@ type XMLBitcase struct {
 // Panic if there is more than one non-nil expression.
 func (b *XMLBitcase) Expr() *XMLExpression {
 	choices := []*XMLExpression{
-		b.ExprOp, b.ExprUnOp, b.ExprField, b.ExprValue,
-		b.ExprBit, b.ExprEnum, b.ExprSum, b.ExprPop,
+		b.ExprOp,
+		b.ExprUnOp,
+		b.ExprField,
+		b.ExprValue,
+		b.ExprBit,
+		b.ExprEnum,
+		b.ExprSum,
+		b.ExprPop,
 	}
 
 	var choice *XMLExpression = nil

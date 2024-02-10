@@ -54,8 +54,7 @@ func ReadSimpleSingleField(c *Context, name string, typ Type) {
 		}
 		c.Putln("%s = %s", name, val)
 	default:
-		log.Panicf("Cannot read field '%s' as a simple field with %T type.",
-			name, typ)
+		log.Panicf("Cannot read field '%s' as a simple field with %T type.", name, typ)
 	}
 
 	c.Putln("b += %s", typ.Size())
@@ -133,8 +132,7 @@ func WriteSimpleSingleField(c *Context, name string, typ Type) {
 			}
 		}
 	default:
-		log.Fatalf("Cannot read field '%s' as a simple field with %T type.",
-			name, typ)
+		log.Fatalf("Cannot read field '%s' as a simple field with %T type.", name, typ)
 	}
 
 	c.Putln("b += %s", typ.Size())
