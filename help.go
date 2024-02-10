@@ -11,7 +11,9 @@ too. (xgbutil uses them too.)
 */
 
 import (
+	"encoding/binary"
 	"fmt"
+	"math/bits"
 	"strings"
 )
 
@@ -39,67 +41,37 @@ func Pad(n int) int {
 
 // PopCount counts the number of bits set in a value list mask.
 func PopCount(mask0 int) int {
-	mask := uint32(mask0)
-	n := 0
-	for i := uint32(0); i < 32; i++ {
-		if mask&(1<<i) != 0 {
-			n++
-		}
-	}
-	return n
+	return bits.OnesCount(uint(mask0))
 }
+
+var byteOrder = binary.LittleEndian
 
 // Put16 takes a 16 bit integer and copies it into a byte slice.
 func Put16(buf []byte, v uint16) {
-	buf[0] = byte(v)
-	buf[1] = byte(v >> 8)
+	byteOrder.PutUint16(buf, v)
 }
 
 // Put32 takes a 32 bit integer and copies it into a byte slice.
 func Put32(buf []byte, v uint32) {
-	buf[0] = byte(v)
-	buf[1] = byte(v >> 8)
-	buf[2] = byte(v >> 16)
-	buf[3] = byte(v >> 24)
+	byteOrder.PutUint32(buf, v)
 }
 
 // Put64 takes a 64 bit integer and copies it into a byte slice.
 func Put64(buf []byte, v uint64) {
-	buf[0] = byte(v)
-	buf[1] = byte(v >> 8)
-	buf[2] = byte(v >> 16)
-	buf[3] = byte(v >> 24)
-	buf[4] = byte(v >> 32)
-	buf[5] = byte(v >> 40)
-	buf[6] = byte(v >> 48)
-	buf[7] = byte(v >> 56)
+	byteOrder.PutUint64(buf, v)
 }
 
 // Get16 constructs a 16 bit integer from the beginning of a byte slice.
 func Get16(buf []byte) uint16 {
-	v := uint16(buf[0])
-	v |= uint16(buf[1]) << 8
-	return v
+	return byteOrder.Uint16(buf)
 }
 
 // Get32 constructs a 32 bit integer from the beginning of a byte slice.
 func Get32(buf []byte) uint32 {
-	v := uint32(buf[0])
-	v |= uint32(buf[1]) << 8
-	v |= uint32(buf[2]) << 16
-	v |= uint32(buf[3]) << 24
-	return v
+	return byteOrder.Uint32(buf)
 }
 
 // Get64 constructs a 64 bit integer from the beginning of a byte slice.
 func Get64(buf []byte) uint64 {
-	v := uint64(buf[0])
-	v |= uint64(buf[1]) << 8
-	v |= uint64(buf[2]) << 16
-	v |= uint64(buf[3]) << 24
-	v |= uint64(buf[4]) << 32
-	v |= uint64(buf[5]) << 40
-	v |= uint64(buf[6]) << 48
-	v |= uint64(buf[7]) << 56
-	return v
+	return byteOrder.Uint64(buf)
 }
