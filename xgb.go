@@ -11,7 +11,7 @@ import (
 
 var (
 	// Where to log error-messages. Defaults to stderr.
-	// To disable logging, just set this to log.New(ioutil.Discard, "", 0)
+	// To disable logging, just set this to log.New(io.Discard, "", 0)
 	Logger = log.New(os.Stderr, "XGB: ", log.Lshortfile)
 )
 
@@ -87,6 +87,7 @@ func NewConn() (*Conn, error) {
 // If 'display' is empty it will be taken from os.Getenv("DISPLAY").
 //
 // Examples:
+//
 //	NewConn(":1") -> net.Dial("unix", "", "/tmp/.X11-unix/X1")
 //	NewConn("/tmp/launch-12/:0") -> net.Dial("unix", "", "/tmp/launch-12/:0")
 //	NewConn("hostname:2.1") -> net.Dial("tcp", "", "hostname:6002")

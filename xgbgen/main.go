@@ -1,19 +1,18 @@
 package main
 
 import (
+	"bytes"
 	"flag"
-	"io/ioutil"
+	"go/format"
+	"io"
 	"log"
 	"os"
-	"os/exec"
 	"strings"
 )
 
 var (
 	protoPath = flag.String("proto-path",
 		"/usr/share/xcb", "path to directory of X protocol XML files")
-	gofmt = flag.Bool("gofmt", true,
-		"When disabled, gofmt will not be run before outputting Go code")
 )
 
 func usage() {
@@ -40,7 +39,7 @@ func main() {
 	}
 
 	// Read the single XML file into []byte
-	xmlBytes, err := ioutil.ReadFile(flag.Arg(0))
+	xmlBytes, err := os.ReadFile(flag.Arg(0))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,16 +48,9 @@ func main() {
 	c := newContext()
 	c.Morph(xmlBytes)
 
-	if !*gofmt {
-		c.out.WriteTo(os.Stdout)
-	} else {
-		cmdGofmt := exec.Command("gofmt")
-		cmdGofmt.Stdin = c.out
-		cmdGofmt.Stdout = os.Stdout
-		cmdGofmt.Stderr = os.Stderr
-		err = cmdGofmt.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
+	formatted, err := format.Source(c.out.Bytes())
+	if err != nil {
+		log.Fatal(err)
 	}
+	io.Copy(os.Stdout, bytes.NewReader(formatted))
 }
