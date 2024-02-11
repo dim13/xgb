@@ -997,6 +997,10 @@ func NewPictureId(c *xgb.Conn) (Picture, error) {
 	return Picture(id), nil
 }
 
+const (
+	PictureNone = 0
+)
+
 // BadPicture is the error number for a BadPicture.
 const BadPicture = 1
 
@@ -1042,10 +1046,6 @@ func (err PictureError) Error() string {
 func init() {
 	xgb.NewExtErrorFuncs["RENDER"][1] = PictureErrorNew
 }
-
-const (
-	PictureNone = 0
-)
 
 type Pictvisual struct {
 	Visual xproto.Visualid

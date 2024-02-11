@@ -2483,6 +2483,10 @@ func NewFontId(c *xgb.Conn) (Font, error) {
 	return Font(id), nil
 }
 
+const (
+	FontNone = 0
+)
+
 // BadFont is the error number for a BadFont.
 const BadFont = 7
 
@@ -2520,10 +2524,6 @@ func (err FontError) Error() string {
 func init() {
 	xgb.NewErrorFuncs[7] = FontErrorNew
 }
-
-const (
-	FontNone = 0
-)
 
 const (
 	FontDrawLeftToRight = 0
@@ -4247,6 +4247,10 @@ func NewPixmapId(c *xgb.Conn) (Pixmap, error) {
 	return Pixmap(id), nil
 }
 
+const (
+	PixmapNone = 0
+)
+
 // BadPixmap is the error number for a BadPixmap.
 const BadPixmap = 4
 
@@ -4284,10 +4288,6 @@ func (err PixmapError) Error() string {
 func init() {
 	xgb.NewErrorFuncs[4] = PixmapErrorNew
 }
-
-const (
-	PixmapNone = 0
-)
 
 const (
 	PlaceOnTop    = 0

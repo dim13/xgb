@@ -106,6 +106,10 @@ const (
 	ClientDisconnectFlagsTerminate = 1
 )
 
+const (
+	CursorNotifyDisplayCursor = 0
+)
+
 // CursorNotify is the event number for a CursorNotifyEvent.
 const CursorNotify = 1
 
@@ -200,10 +204,6 @@ func (v CursorNotifyEvent) String() string {
 func init() {
 	xgb.NewExtEventFuncs["XFIXES"][1] = CursorNotifyEventNew
 }
-
-const (
-	CursorNotifyDisplayCursor = 0
-)
 
 const (
 	CursorNotifyMaskDisplayCursor = 1

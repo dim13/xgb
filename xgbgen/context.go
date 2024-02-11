@@ -148,8 +148,8 @@ func (c *Context) Morph(xmlBytes []byte) {
 	}
 
 	// Now write Go source code
-	sort.Sort(Types(c.protocol.Types))
-	sort.Sort(Requests(c.protocol.Requests))
+	sort.Stable(Types(c.protocol.Types))
+	sort.Stable(Requests(c.protocol.Requests))
 	for _, typ := range c.protocol.Types {
 		typ.Define(c)
 	}
