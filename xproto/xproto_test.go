@@ -296,8 +296,7 @@ func changeAndGetProp(prop, val string) (string, error) {
 		return "", fmt.Errorf("GetProperty: %s", err)
 	}
 	if reply.Format != 8 {
-		return "", fmt.Errorf("Property reply format is %d but it should be 8.",
-			reply.Format)
+		return "", fmt.Errorf("Property reply format is %d but it should be 8", reply.Format)
 	}
 
 	return string(reply.Value), nil
